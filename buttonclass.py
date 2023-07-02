@@ -51,12 +51,14 @@ class PlayButton(Button):
 
 
 class ItemButton(Button):
-    def __init__(self, x, y, width, height, block):
+    def __init__(self, x, y, width, height, tile):
         super().__init__(x, y, width, height)
-        self.block = block
+        self.tile = tile
 
     def action(self):
-        itemselect.ItemSelect.item_selected = self.block
+        if stageloader.LevelLoader.tile_count[self.tile] != 0:
+            print("a")
+            itemselect.ItemSelect.item_selected = self.tile
 
 
 

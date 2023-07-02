@@ -6,8 +6,8 @@ class Tile:
     game_state = None
 
     def __init__(self, x, y, width, height, scale):
-        self.x = x
-        self.y = y
+        self.x = x * scale
+        self.y = y * scale
         self.width = width
         self.height = height
         self.scale = scale

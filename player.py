@@ -18,7 +18,7 @@ class Player:
         self.image = pygame.image.load(os.path.join("images", "theamongus.png"))
         self.image = pygame.transform.scale(self.image, (scale//2, scale//2))
         self.hit_box = pygame.Rect(self.x, self.y, self.image.get_width(), self.image.get_height())
-        self.movable = False
+        self.movable = True
 
     def update(self, dt):
         self.dt = dt

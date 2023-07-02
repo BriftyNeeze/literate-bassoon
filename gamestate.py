@@ -1,6 +1,7 @@
 import sys
 import pygame
 
+import buttonclass
 import itemselect
 
 
@@ -13,7 +14,6 @@ class GameState:
         self.object_list = []
         self.static_object_list = []
         self.dt = 60
-        self.scale = 10
         GameState.scr = screen
 
     def main_menu(self):

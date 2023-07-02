@@ -1,7 +1,9 @@
 import pygame
 import buttonclass
 import gamestate
+import itemselect
 import player
+import stageloader
 import tileclass
 
 
@@ -13,11 +15,11 @@ def main():
     pygame.display.update()
     game_state = gamestate.GameState(screen)
     buttonclass.Button.game_state = game_state
-    buttonclass.Button.screen = screen
     player.Player.game_state = game_state
-    player.Player.screen = screen
     tileclass.Tile.game_state = game_state
-    tileclass.Tile.screen = screen
+    itemselect.ItemSelect.game_state = game_state
+    stageloader.LevelLoader.game_state = game_state
+
     button = buttonclass.PlayButton(screen.get_width()//2, screen.get_height()//2, 200, 60)
     game_state.object_list.append(button)
     del button
