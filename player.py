@@ -38,21 +38,27 @@ class Player:
             if static_obj_list[i].__class__ == tileclass.Tile:
                 if self.hit_box.colliderect(static_obj_list[i].hit_box):
                     blocked = False
-                    if self.hit_box.midleft[0] <= static_obj_list[i].hit_box.right and static_obj_list[i].hit_box.bottom >= self.hit_box.midleft[1] >= static_obj_list[i].hit_box.top and self.hit_box.left >= (static_obj_list[i].hit_box.center[0] + static_obj_list[i].hit_box.right*2)//3:
+                    if self.hit_box.midleft[0] <= static_obj_list[i].hit_box.right and static_obj_list[i].hit_box.\
+                            bottom >= self.hit_box.midleft[1] >= static_obj_list[i].hit_box.top and self.hit_box.left \
+                            >= (static_obj_list[i].hit_box.center[0] + static_obj_list[i].hit_box.right*2)//3:
                         self.player_dx = max(0, self.player_dx)
                         self.hit_box.left = static_obj_list[i].hit_box.right
                         blocked = True
 
-                    if self.hit_box.midright[0] >= static_obj_list[i].hit_box.left and static_obj_list[i].hit_box.bottom >= self.hit_box.midright[1] >= static_obj_list[i].hit_box.top and self.hit_box.right <= (static_obj_list[i].hit_box.center[0] + static_obj_list[i].hit_box.left*2)//3:
+                    if self.hit_box.midright[0] >= static_obj_list[i].hit_box.left and static_obj_list[i].hit_box.\
+                            bottom >= self.hit_box.midright[1] >= static_obj_list[i].hit_box.top and self.hit_box.right\
+                            <= (static_obj_list[i].hit_box.center[0] + static_obj_list[i].hit_box.left*2)//3:
                         self.player_dx = min(0, self.player_dx)
                         self.hit_box.right = static_obj_list[i].hit_box.left
                         blocked = True
 
-                    if static_obj_list[i].hit_box.center[1] <= self.hit_box.top <= static_obj_list[i].hit_box.bottom and not blocked:
+                    if static_obj_list[i].hit_box.center[1] <= self.hit_box.top <= static_obj_list[i].hit_box.bottom \
+                            and not blocked:
                         self.player_dy = max(self.player_dy, 0)
                         self.hit_box.top = static_obj_list[i].hit_box.bottom+1
 
-                    if static_obj_list[i].hit_box.center[1] >= self.hit_box.bottom >= static_obj_list[i].hit_box.top and not blocked:
+                    if static_obj_list[i].hit_box.center[1] >= self.hit_box.bottom >= static_obj_list[i].hit_box.top \
+                            and not blocked:
                         self.player_dy = 0
                         self.hit_box.bottom = static_obj_list[i].hit_box.top+1
                         if keys[pygame.K_SPACE]:

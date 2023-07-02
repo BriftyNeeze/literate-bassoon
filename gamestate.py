@@ -1,6 +1,8 @@
 import sys
 import pygame
 
+import itemselect
+
 
 class GameState:
     scr = None
@@ -35,6 +37,9 @@ class GameState:
             self.screen.blit(obj.image, (obj.x, obj.y))
         for obj in self.static_object_list:
             self.screen.blit(obj.image, (obj.x, obj.y))
+
+        if itemselect.ItemSelect.item_selected:
+            itemselect.ItemSelect.update()
 
     def state_manager(self, dt):
         self.dt = dt
