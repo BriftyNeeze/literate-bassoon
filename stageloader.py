@@ -6,27 +6,28 @@ import gamestate
 import tileclass
 
 
-level = [
-    "........................",
-    "........................",
-    "........................",
-    "........................",
-    "........................",
-    "........................",
-    "........................",
-    "..............xxxxxxxxxx",
-    "........................",
-    "xxxxxxxxxxx.............",
-    [("regular_tile_one", 10)]
-]
-
 # level = [
-#     "............",
-#     "............",
-#     "xxxx....xxxx",
-#     "............",
-#     "xxxxx..xxxxx",
+#     "........................",
+#     "........................",
+#     "........................",
+#     "........................",
+#     "........................",
+#     "........................",
+#     "........................",
+#     "........x.....xxxxxxxxxx",
+#     "........x...............",
+#     "xxxxxxxxxxx.............",
+#     [("regular_tile_one", 100)]
 # ]
+
+level = [
+    "............",
+    "............",
+    "xxxx....xxxx",
+    "............",
+    "xxxxx..xxxxx",
+    [("regular_tile_one", 100)]
+]
 
 
 class LevelLoader:
@@ -51,8 +52,8 @@ class LevelLoader:
         LevelLoader.level_width = scale * len(level[0])
         LevelLoader.level_height = scale * (len(level)-1)
         LevelLoader.level_scale = scale
-        plr = player.Player(50, 50, scale)
-        object_list.append(plr)
+        player.Player(50, 50, scale)
+
         for i in range(len(level)-1):
             LevelLoader.current_level.append([])
             for j in range(len(level[i])):

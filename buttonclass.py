@@ -43,10 +43,10 @@ class Button:
 class PlayButton(Button):
     def action(self):
         Button.game_state.object_list.clear()
+        Button.game_state.static_object_list.clear()
         new_object_list, new_static_object_list = stageloader.LevelLoader.create_level()
         Button.game_state.object_list = new_object_list
         Button.game_state.static_object_list = new_static_object_list
-
         Button.game_state.state = "stage"
 
 

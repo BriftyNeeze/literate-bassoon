@@ -1,20 +1,17 @@
 import sys
 import pygame
-
 import buttonclass
 import itemselect
 
 
 class GameState:
-    scr = None
-
     def __init__(self, screen):
         self.state = "main_menu"
         self.screen = screen
         self.object_list = []
         self.static_object_list = []
+        self.player_group = pygame.sprite.Group()
         self.dt = 60
-        GameState.scr = screen
 
     def main_menu(self):
         for event in pygame.event.get():
@@ -32,6 +29,8 @@ class GameState:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+        self.player_group.update(self.dt)
+        self.player_group.draw(self.screen)
         for obj in self.object_list:
             obj.update(self.dt)
             self.screen.blit(obj.image, (obj.x, obj.y))

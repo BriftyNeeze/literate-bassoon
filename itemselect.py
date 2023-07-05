@@ -36,7 +36,7 @@ class ItemSelect:
             display_image = ItemSelect.image_dict[item]
             display_image = pygame.transform.scale(display_image, (level_scale, level_scale))
             display_image.set_alpha(128)
-            gamestate.GameState.scr.blit(display_image, (grid_x * level_scale, grid_y * level_scale))
+            ItemSelect.game_state.screen.blit(display_image, (grid_x * level_scale, grid_y * level_scale))
 
             if state == 1 and not ItemSelect.button_pressed:
                 ItemSelect.button_pressed = True

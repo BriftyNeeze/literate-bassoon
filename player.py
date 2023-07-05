@@ -1,13 +1,15 @@
 import os
 import pygame
 import gamestate
+import stageloader
 import tileclass
 
 
-class Player:
+class Player(pygame.sprite.Sprite):
     game_state = None
 
     def __init__(self, x, y, scale):
+        pygame.sprite.Sprite.__init__(self)
         self.scale = scale
         self.dt = 60
         self.x = x
@@ -17,8 +19,10 @@ class Player:
         self.player_max_dy = 0.25 * scale
         self.image = pygame.image.load(os.path.join("images", "theamongus.png"))
         self.image = pygame.transform.scale(self.image, (scale//2, scale//2))
-        self.hit_box = pygame.Rect(self.x, self.y, self.image.get_width(), self.image.get_height())
+        self.rect = pygame.Rect(self.x, self.y, self.image.get_width(), self.image.get_height())
         self.movable = True
+        self.can_jump = False
+        pygame.sprite.Sprite.add(self, Player.game_state.player_group)
 
     def update(self, dt):
         self.dt = dt
@@ -30,42 +34,52 @@ class Player:
         self.player_dx = (keys[pygame.K_d] - keys[pygame.K_a]) * 0.16 * self.scale
         self.player_dy += (0.05 * self.scale)
         self.player_dy = min(self.player_dy, self.player_max_dy)
-        self.hit_box.move_ip(self.player_dx, self.player_dy)
+        last_hit_box = self.rect.copy()
         obj_list = Player.game_state.object_list
         static_obj_list = Player.game_state.static_object_list
+        level_grid = stageloader.LevelLoader.current_level
+        grid_x = self.x // self.scale
+        grid_y = self.y // self.scale
+        # check blocks in a 3x3 radius
+        calculate_list = []
+        for i in range(3):
+            if grid_x + i - 1 >= len(level_grid[0]) or grid_x + i - 1 < 0:
+                continue
+            for j in range(3):
+                if grid_y+j-1 >= len(level_grid) or grid_y+j-1 < 0:
+                    continue
+                if level_grid[grid_y+j-1][grid_x+i-1]:
+                    calculate_list.append(level_grid[grid_y+j-1][grid_x+i-1])
 
-        for i in range(len(static_obj_list)):
-            if static_obj_list[i].__class__ == tileclass.Tile:
-                if self.hit_box.colliderect(static_obj_list[i].hit_box):
-                    blocked = False
-                    if self.hit_box.midleft[0] <= static_obj_list[i].hit_box.right and static_obj_list[i].hit_box.\
-                            bottom >= self.hit_box.midleft[1] >= static_obj_list[i].hit_box.top and self.hit_box.left \
-                            >= (static_obj_list[i].hit_box.center[0] + static_obj_list[i].hit_box.right*2)//3:
-                        self.player_dx = max(0, self.player_dx)
-                        self.hit_box.left = static_obj_list[i].hit_box.right
-                        blocked = True
+        # vertical check
+        self.rect.y += self.player_dy
+        self.can_jump = False
+        for obj in calculate_list:
+            if self.rect.colliderect(obj[0].rect):
+                if self.player_dy < 0:
+                    self.rect.top = obj[0].rect.bottom
+                    self.player_dy = 0
+                if self.player_dy > 0:
+                    self.rect.bottom = obj[0].rect.top
+                    self.can_jump = True
+                    self.player_dy = 0
 
-                    if self.hit_box.midright[0] >= static_obj_list[i].hit_box.left and static_obj_list[i].hit_box.\
-                            bottom >= self.hit_box.midright[1] >= static_obj_list[i].hit_box.top and self.hit_box.right\
-                            <= (static_obj_list[i].hit_box.center[0] + static_obj_list[i].hit_box.left*2)//3:
-                        self.player_dx = min(0, self.player_dx)
-                        self.hit_box.right = static_obj_list[i].hit_box.left
-                        blocked = True
+        # horizontal check
+        self.rect.x += self.player_dx
+        for obj in calculate_list:
+            if self.rect.colliderect(obj[0].rect):
+                if self.player_dx < 0:
+                    self.rect.left = obj[0].rect.right
+                if self.player_dx > 0:
+                    self.rect.right = obj[0].rect.left
 
-                    if static_obj_list[i].hit_box.center[1] <= self.hit_box.top <= static_obj_list[i].hit_box.bottom \
-                            and not blocked:
-                        self.player_dy = max(self.player_dy, 0)
-                        self.hit_box.top = static_obj_list[i].hit_box.bottom+1
+        if keys[pygame.K_SPACE] and self.can_jump:
+            self.player_dy = -0.5 * self.scale
 
-                    if static_obj_list[i].hit_box.center[1] >= self.hit_box.bottom >= static_obj_list[i].hit_box.top \
-                            and not blocked:
-                        self.player_dy = 0
-                        self.hit_box.bottom = static_obj_list[i].hit_box.top+1
-                        if keys[pygame.K_SPACE]:
-                            self.player_dy = -0.5 * self.scale
-        if self.hit_box.bottom > Player.game_state.screen.get_height():
+
+        if self.rect.bottom > Player.game_state.screen.get_height():
             self.player_dy = 0
-            self.hit_box.bottom = 50
+            self.rect.bottom = 50
 
-        self.x = self.hit_box.x
-        self.y = self.hit_box.y
+        self.x = self.rect.x
+        self.y = self.rect.y
