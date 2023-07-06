@@ -1,13 +1,12 @@
 import os
 import pygame
+import gameinformation
 import gamestate
 import stageloader
 import tileclass
 
 
 class Player(pygame.sprite.Sprite):
-    game_state = None
-
     def __init__(self, x, y, scale):
         pygame.sprite.Sprite.__init__(self)
         self.scale = scale
@@ -22,7 +21,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = pygame.Rect(self.x, self.y, self.image.get_width(), self.image.get_height())
         self.movable = True
         self.can_jump = False
-        pygame.sprite.Sprite.add(self, Player.game_state.player_group)
+        pygame.sprite.Sprite.add(self, gameinformation.game_state.player_group)
 
     def update(self, dt):
         self.dt = dt
@@ -34,12 +33,12 @@ class Player(pygame.sprite.Sprite):
         self.player_dx = (keys[pygame.K_d] - keys[pygame.K_a]) * 0.16 * self.scale
         self.player_dy += (0.05 * self.scale)
         self.player_dy = min(self.player_dy, self.player_max_dy)
-        last_hit_box = self.rect.copy()
-        obj_list = Player.game_state.object_list
-        static_obj_list = Player.game_state.static_object_list
-        level_grid = stageloader.LevelLoader.current_level
+        # obj_list = gameinformation.game_state.object_list
+        # static_obj_list = gameinformation.game_state.static_object_list
+        level_grid = gameinformation.level_loader.current_level
         grid_x = self.x // self.scale
         grid_y = self.y // self.scale
+
         # check blocks in a 3x3 radius
         calculate_list = []
         for i in range(3):
@@ -76,8 +75,7 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_SPACE] and self.can_jump:
             self.player_dy = -0.5 * self.scale
 
-
-        if self.rect.bottom > Player.game_state.screen.get_height():
+        if self.rect.bottom > gameinformation.game_state.screen.get_height():
             self.player_dy = 0
             self.rect.bottom = 50
 

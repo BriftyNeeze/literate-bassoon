@@ -3,8 +3,6 @@ import pygame
 
 
 class Tile:
-    game_state = None
-
     def __init__(self, x, y, width, height, scale):
         self.x = x * scale
         self.y = y * scale

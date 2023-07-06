@@ -1,13 +1,13 @@
 import os
 import pygame
+
+import gameinformation
 import stageloader
 import itemselect
 import gamestate
 
 
 class Button:
-    game_state = None
-
     def __init__(self, x, y, width, height):
         self.x = x - width // 2
         self.y = y - height // 2
@@ -42,12 +42,19 @@ class Button:
 
 class PlayButton(Button):
     def action(self):
-        Button.game_state.object_list.clear()
-        Button.game_state.static_object_list.clear()
-        new_object_list, new_static_object_list = stageloader.LevelLoader.create_level()
-        Button.game_state.object_list = new_object_list
-        Button.game_state.static_object_list = new_static_object_list
-        Button.game_state.state = "stage"
+        gameinformation.game_state.object_list.clear()
+        gameinformation.game_state.static_object_list.clear()
+
+        level_loader = stageloader.LevelLoader()
+        gameinformation.level_loader = level_loader
+
+        item_select = itemselect.ItemSelect()
+        gameinformation.item_select = item_select
+
+        new_object_list, new_static_object_list = level_loader.create_level()
+        gameinformation.game_state.object_list = new_object_list
+        gameinformation.game_state.static_object_list = new_static_object_list
+        gameinformation.game_state.state = "stage"
 
 
 class ItemButton(Button):
@@ -56,9 +63,9 @@ class ItemButton(Button):
         self.tile = tile
 
     def action(self):
-        if stageloader.LevelLoader.tile_count[self.tile] != 0:
+        if gameinformation.level_loader.tile_count[self.tile] != 0:
             print("a")
-            itemselect.ItemSelect.item_selected = self.tile
+            gameinformation.item_select.item_selected = self.tile
 
 
 

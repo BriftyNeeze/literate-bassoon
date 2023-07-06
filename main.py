@@ -1,5 +1,6 @@
 import pygame
 import buttonclass
+import gameinformation
 import gamestate
 import itemselect
 import player
@@ -14,6 +15,7 @@ def main():
     screen.fill((101, 238, 247))
     pygame.display.update()
     game_state = gamestate.GameState(screen)
+    gameinformation.game_state = game_state
     buttonclass.Button.game_state = game_state
     player.Player.game_state = game_state
     tileclass.Tile.game_state = game_state
