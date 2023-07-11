@@ -18,3 +18,35 @@ class Tile:
         self.dt = dt
         self.rect = pygame.Rect(self.x, self.y, self.image.get_width(), self.image.get_height())
 
+    def interact_y(self, player):
+        if player.rect.colliderect(self.rect):
+            if player.player_dy < 0:
+                player.rect.top = self.rect.bottom
+                player.player_dy = 0
+            if player.player_dy > 0:
+                player.rect.bottom = self.rect.top
+                player.can_jump = True
+                player.player_dy = 0
+
+    def interact_x(self, player):
+        if player.rect.colliderect(self.rect):
+            if player.player_dx < 0:
+                player.rect.left = self.rect.right
+            if player.player_dx > 0:
+                player.rect.right = self.rect.left
+
+
+class SemiSolid(Tile):
+    def __init__(self, x, y, width, height, scale):
+        super().__init__(x, y, width, height, scale)
+        self.height = 0.2
+
+    def interact_y(self, player):
+        if player.rect.colliderect(self.rect):
+            if player.player_dy > 0:
+                player.rect.bottom = self.rect.top
+                player.can_jump = True
+                player.player_dy = 0
+
+    def interact_x(self, player):
+        pass

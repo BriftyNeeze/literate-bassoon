@@ -58,14 +58,18 @@ class PlayButton(Button):
 
 
 class ItemButton(Button):
-    def __init__(self, x, y, width, height, tile):
+    def __init__(self, x, y, width, height, tile, tile_width, tile_height):
         super().__init__(x, y, width, height)
         self.tile = tile
+        self.tile_width = tile_width
+        self.tile_height = tile_height
 
     def action(self):
         if gameinformation.level_loader.tile_count[self.tile] != 0:
             print("a")
             gameinformation.item_select.item_selected = self.tile
+            gameinformation.item_select.tile_width = self.tile_width
+            gameinformation.item_select.tile_height = self.tile_height
 
 
 

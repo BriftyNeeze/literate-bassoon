@@ -24,20 +24,14 @@ import tileclass
 level = [
     "............",
     "............",
-    "xxxx....xxxx",
+    "yyyy....xxxx",
     "............",
     "xxxxx..xxxxx",
-    [("regular_tile_one", 100)]
+    [("regular_tile_one", 100, 1, 1)]  # object, count, grid width, grid height
 ]
 
 
 class LevelLoader:
-    # level_width = 50
-    # level_height = 50
-    # level_scale = 1
-    # current_level = []
-    # tile_count = defaultdict(int)
-
     def __init__(self):
         self.level_width = 50
         self.level_height = 50
@@ -64,13 +58,18 @@ class LevelLoader:
                     obj = tileclass.Tile(0 + j, 0 + i, 1, 1, self.level_scale)
                     static_object_list.append(obj)
                     self.current_level[i].append((obj, False))  # object, deletable
+                elif level[i][j] == "y":
+                    obj = tileclass.SemiSolid(0 + j, 0 + i, 1, 0.2, self.level_scale)
+                    static_object_list.append(obj)
+                    self.current_level[i].append((obj, False))  # object, deletable
                 else:
                     self.current_level[i].append(None)
 
         for i in range(len(level[-1])):
             if level[-1][i][0] == "regular_tile_one":
                 button = buttonclass.ItemButton(gameinformation.game_state.screen.get_width() // 2,
-                                                gameinformation.game_state.screen.get_height() * 0.9, 50, 50, "regular_tile_one")
+                                                gameinformation.game_state.screen.get_height() * 0.9, 50, 50,
+                                                level[-1][i][0], level[-1][i][2], level[-1][i][3])
                 object_list.append(button)
                 self.tile_count[level[-1][i][0]] = level[-1][i][1]
 

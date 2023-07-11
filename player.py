@@ -54,23 +54,12 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.player_dy
         self.can_jump = False
         for obj in calculate_list:
-            if self.rect.colliderect(obj[0].rect):
-                if self.player_dy < 0:
-                    self.rect.top = obj[0].rect.bottom
-                    self.player_dy = 0
-                if self.player_dy > 0:
-                    self.rect.bottom = obj[0].rect.top
-                    self.can_jump = True
-                    self.player_dy = 0
+            obj[0].interact_y(self)
 
         # horizontal check
         self.rect.x += self.player_dx
         for obj in calculate_list:
-            if self.rect.colliderect(obj[0].rect):
-                if self.player_dx < 0:
-                    self.rect.left = obj[0].rect.right
-                if self.player_dx > 0:
-                    self.rect.right = obj[0].rect.left
+            obj[0].interact_x(self)
 
         if keys[pygame.K_SPACE] and self.can_jump:
             self.player_dy = -0.5 * self.scale
